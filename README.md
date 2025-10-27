@@ -94,6 +94,5 @@ Start in:         C:\Users\Bernardo\Desktop\DGA
 <h2>Dicas de Qualidade</h2>
 <ul>
   <li>Mantenha os filtros o mais simples possível (API mínima = menos chance de travar).</li>
-  <li>Faça commit dos scripts, mas <strong>não</strong> commite o <code>.env</code>.</li>
   <li>Prefira datas exatas (ex.: <code>YYYY-MM-DD</code>) para reprodutibilidade.</li>
 </ul>
