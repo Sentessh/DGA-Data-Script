@@ -1,7 +1,13 @@
-CRIA UMA PASTA .env E COLOCA ISSO AQUI
+<div>
 
-===============================================
-"API_BASE=https://api.api-tennis.com/tennis/
+  <h1>Configuração do Projeto</h1>
+
+  <h2>Criação do arquivo <code>.env</code></h2>
+
+  <p>Crie uma pasta chamada <code>.env</code> e coloque dentro dela o seguinte conteúdo:</p>
+
+  <pre><code>===============================================
+API_BASE=https://api.api-tennis.com/tennis/
 API_KEY="BOTA A CHAVE DA API AQ, SEM AS ASPAS"
 
 RAW_DIR=./data/raw
@@ -12,16 +18,32 @@ DB_HOST=
 DB_PORT=
 DB_NAME=
 DB_USER=
-DB_PASS="
-===============================================
+DB_PASS=
+===============================================</code></pre>
 
-PRA RODAR É AQUELE ESQUEMA MODIFICA ESSE COMANDO AQUI PRA DATA QUE VC QUISER
+  <hr />
 
-ESSE AQUI FUNCIONA QND VC ESTÁ DENTRO DE src, MAS QLQR COISA É SÓ MUDAR ALI TLGD, BOTAR O CAMINHO ATÉ O etl_runner.py
+  <h2>Execução do Script</h2>
 
-python etl_runner.py --date 2025-10-29 --load-mode replace
+  <p>Pra rodar é aquele esquema: modifica o comando abaixo pra data que você quiser.</p>
 
-O LOAD N TÁ FUNCIONANDO, N SEI PQ, ACHO QUE CONFIGUREI ERRADO OU PERDEMOS ACESSO AO BANCO DE DADOS KK
+  <p>Esse aqui funciona quando você está <strong>dentro da pasta <code>src</code></strong>, mas se não estiver, é só ajustar o caminho até o arquivo <code>etl_runner.py</code>, tlgd?</p>
 
-ALÉM DISSO CASO O CÓDIGO RECLAMA QUE NN TÁ TENDO ONDE SALVAR OS CSV É SÓ CRIAR UMA PASTA CHAMADA data DENTRO DE src E DENTRO DELA CRIAR
-MAIS DUAS PASTAS, UMA CHAMADA raw E OUTRA CHAMADA processed QUE DEVE FUNCIONAR DEBOA :)
+  <pre><code>python etl_runner.py --date 2025-10-29 --load-mode replace</code></pre>
+
+  <p><strong>Atenção:</strong> O <code>--load-mode</code> não tá funcionando, não sei por quê, acho que configurei errado ou perdemos acesso ao banco de dados kk</p>
+
+  <hr />
+
+  <h2>Estrutura de Diretórios</h2>
+
+  <p>Caso o código reclame que não tem onde salvar os CSVs, é só criar a pasta <code>data</code> dentro de <code>src</code>, e dentro dela criar mais duas pastas:</p>
+
+  <ul>
+    <li><code>raw</code></li>
+    <li><code>processed</code></li>
+  </ul>
+
+  <p>Assim deve funcionar de boa :)</p>
+
+</div>
