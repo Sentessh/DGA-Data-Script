@@ -1,6 +1,6 @@
 CRIA UMA PASTA .env E COLOCA ISSO AQUI
 
-----------------------------------------
+===============================================
 API_BASE=https://api.api-tennis.com/tennis/
 API_KEY="BOTA A CHAVE DA API AQ, SEM AS ASPAS"
 
@@ -13,7 +13,7 @@ DB_PORT=
 DB_NAME=
 DB_USER=
 DB_PASS=
-------------------------------------------
+===============================================
 
 PRA RODAR É AQUELE ESQUEMA MODIFICA ESSE COMANDO AQUI PRA DATA QUE VC QUISER
 
