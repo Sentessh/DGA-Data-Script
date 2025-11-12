@@ -9,7 +9,7 @@ import pandas as pd
 import requests
 
 API_BASE = "https://api.api-tennis.com/tennis/"
-API_KEY = "931591825e219e56d07e0d0c49d24cb7c0672fc09dc0e6b12f2c7920a3b51dfc"  # <-- coloque sua chave válida aqui
+API_KEY = "931591825e219e56d07e0d0c49d24cb7c0672fc09dc0e6b12f2c7920a3b51dfc"
 
 RAW_DIR = Path("./data/raw")
 
