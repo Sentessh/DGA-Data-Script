@@ -2,20 +2,13 @@ import subprocess
 from pathlib import Path
 
 def extract_all(date: str):
-
-    print(f"\n[EXTRACT] Iniciando coleta de dados para {date}...\n")
-
+    print(f"\n[EXTRACT] Coletando dados para {date}...")
     script_path = Path(__file__).parent / "fetch_api.py"
-    cmd = [
-        "python",
-        str(script_path),
-        "--date", date,
-        "--sort-cols"
-    ]
+
+    cmd = ["python", str(script_path), "--date", date]
 
     try:
         subprocess.run(cmd, check=True)
-        print("\n[EXTRACT] Coleta concluída com sucesso.")
-    except subprocess.CalledProcessError as e:
-        print(f"[ERRO] Falha ao executar fetch_api.py: {e}")
-        raise
+        print("[EXTRACT] Sucesso.")
+    except Exception as e:
+        print(f"[ERRO] Falha: {e}")
