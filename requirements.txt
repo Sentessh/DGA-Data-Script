@@ -1,5 +1,7 @@
-pandas
-python-dotenv
-requests
-SQLAlchemy
-pyodbc
+pandas==2.2.2
+requests==2.32.3
+python-dotenv==1.0.1
+SQLAlchemy==2.0.30
+pytds==1.16.1
+tqdm==4.66.4
+python-dateutil==2.9.0.post0
