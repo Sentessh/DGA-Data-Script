@@ -28,34 +28,16 @@ def main():
 
     print(f"\n🚀 PIPELINE DGA_WTA — DATA {data_ref}")
 
-    run([
-        sys.executable,
-        "src/fetch_api.py",
-        "--date", data_ref
-    ])
+    run([sys.executable, "src/fetch_api.py", "--date", data_ref])
 
-    run([
-        sys.executable,
-        "src/extract.py",
-        "--date", data_ref
-    ])
-
-    etl_cmd = [
-        sys.executable,
-        "src/etl_runner.py",
-        "--date", data_ref
-    ]
-
+    # ✅ extract.py já engloba o etl_runner internamente
+    extract_cmd = [sys.executable, "src/extract.py", "--date", data_ref]
     if args.db:
-        etl_cmd.append("--db")
+        extract_cmd.append("--db")
+    run(extract_cmd)
 
-    run(etl_cmd)
-
-    run([
-        sys.executable,
-        "src/sql_runner.py",
-        "--date", data_ref
-    ])
+    # ✅ etl_runner.py removido daqui — evita dupla execução
+    run([sys.executable, "src/sql_runner.py", "--date", data_ref])
 
     print("\n✅ PIPELINE FINALIZADO COM SUCESSO")
 

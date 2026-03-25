@@ -19,7 +19,7 @@ FINAL_DIR = BASE_DIR / "data" / "final"
 def get_engine():
     odbc = (
         f"DRIVER={{{os.getenv('DB_DRIVER')}}};"
-        f"SERVER={os.getenv('DB_HOST')};"
+        f"SERVER={os.getenv('DB_HOST')},{os.getenv('DB_PORT')};"  # ✅ Inclui porta
         f"DATABASE={os.getenv('DB_NAME')};"
         f"UID={os.getenv('DB_USER')};"
         f"PWD={os.getenv('DB_PASS')};"
@@ -61,13 +61,13 @@ def processar_etl(df_fix, df_rank, df_stats, data_ref):
             if pd.notna(r.get("first_player_key")):
                 players.append({
                     "player_api_id": r["first_player_key"],
-                    "nome_completo": r["first_player"]
+                    "nome_completo": r["event_first_player"]   # ✅ Corrigido
                 })
 
             if pd.notna(r.get("second_player_key")):
                 players.append({
                     "player_api_id": r["second_player_key"],
-                    "nome_completo": r["second_player"]
+                    "nome_completo": r["event_second_player"]  # ✅ Corrigido
                 })
 
     if df_rank is not None:
@@ -128,7 +128,7 @@ def processar_etl(df_fix, df_rank, df_stats, data_ref):
         })
 
     # ======================
-    # ⭐ NOVO: MATCH STATS RAW
+    # MATCH STATS RAW
     # ======================
     if df_stats is not None and not df_stats.empty:
 
@@ -168,9 +168,9 @@ def main():
     r_csv = sorted(RAW_DIR.glob("standings_*.csv"), reverse=True)
     s_csv = sorted(RAW_DIR.glob("stats_*.csv"), reverse=True)
 
-    df_fix = pd.read_csv(f_csv[0]) if f_csv else None
-    df_rank = pd.read_csv(r_csv[0]) if r_csv else None
-    df_stats = pd.read_csv(s_csv[0]) if s_csv else None
+    df_fix   = pd.read_csv(f_csv[0])   if f_csv   else None
+    df_rank  = pd.read_csv(r_csv[0])   if r_csv   else None
+    df_stats = pd.read_csv(s_csv[0])   if s_csv   else None
 
     tabelas = processar_etl(df_fix, df_rank, df_stats, args.date)
 
@@ -188,7 +188,7 @@ def main():
             df.to_sql(
                 nome,
                 engine,
-                schema="stg_wta",
+                schema="stg_api",
                 if_exists="append",
                 index=False
             )

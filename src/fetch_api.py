@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_BASE = "https://api.api-tennis.com/tennis/"
-API_KEY = os.getenv("TENNIS_API_KEY") 
+API_KEY = os.getenv("TENNIS_API_KEY")
 RAW_DIR = Path("./data/raw")
 SLEEP = 0.6
 
@@ -28,9 +28,7 @@ def call_api(method: str, **params):
 
 def extrair_estatisticas(event):
     registros = []
-
     stats = event.get("statistics", [])
-
     for s in stats:
         registros.append({
             "event_key": event.get("event_key"),
@@ -38,7 +36,6 @@ def extrair_estatisticas(event):
             "stat_name": s.get("stat_name"),
             "stat_value": s.get("stat_value")
         })
-
     return registros
 
 def run_fetch(date: str, event_type: str = "WTA"):
@@ -50,7 +47,7 @@ def run_fetch(date: str, event_type: str = "WTA"):
     if rec_fix:
         df = pd.json_normalize(rec_fix)
 
-        ts = dt.datetime.now().strftime("%Y%H%M%S")
+        ts = dt.datetime.now().strftime("%Y%m%d%H%M%S")  # ✅ Corrigido: incluído %m%d
         df.to_csv(RAW_DIR / f"fixtures_{date}_{ts}.csv", index=False)
         print(f"[OK] Fixtures: {len(df)} registros.")
 
@@ -70,7 +67,7 @@ def run_fetch(date: str, event_type: str = "WTA"):
 
     if rec_stand:
         df = pd.json_normalize(rec_stand)
-        ts = dt.datetime.now().strftime("%Y%H%M%S")
+        ts = dt.datetime.now().strftime("%Y%m%d%H%M%S")  # ✅ Corrigido: incluído %m%d
         df.to_csv(RAW_DIR / f"standings_{date}_{ts}.csv", index=False)
         print(f"[OK] Standings: {len(df)} registros.")
 

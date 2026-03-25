@@ -10,7 +10,7 @@ PROCEDURES = [
     "dbo.merge_partida",
     "dbo.merge_partida_x_jogador",
     "dbo.merge_ranking_jogador",
-    "dbo.merge_estatisticas_partida"
+    "dbo.merge_estatisticas_partida",   # ✅ Corrigido: nome consistente com o SQL
 ]
 
 def main(data_ref):
@@ -29,7 +29,7 @@ def main(data_ref):
         }).fetchone()
 
         if check and check[0] == "SUCCESS":
-            print("⏭ ETL já executado para essa data")
+            print("⏭ ETL já executado para essa data.")
             return
 
         conn.execute(text("""
@@ -49,7 +49,7 @@ def main(data_ref):
 
         try:
             for proc in PROCEDURES:
-                print(f"▶ Executando {proc}")
+                print(f"▶ Executando {proc}...")
                 conn.execute(
                     text(f"EXEC {proc} @data_ref = :data_ref"),
                     {"data_ref": data_ref}
@@ -65,7 +65,7 @@ def main(data_ref):
                 "data_ref": data_ref
             })
 
-            print("SQL pipeline finalizado com sucesso")
+            print("✅ SQL pipeline finalizado com sucesso.")
 
         except Exception as e:
             conn.execute(text("""
