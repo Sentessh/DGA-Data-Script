@@ -60,22 +60,25 @@ def processar_etl(df_fix, df_rank, df_stats, data_ref):
         for _, r in df_fix.iterrows():
             if pd.notna(r.get("first_player_key")):
                 players.append({
-                    "player_api_id": r["first_player_key"],
-                    "nome_completo": r["event_first_player"]   # ✅ Corrigido
+                    "player_api_id": r.get("first_player_key"),
+                    "nome_completo": r.get("first_player", r.get("event_first_player")),
+                    "foto": r.get("event_first_player_logo") # -- LEO
                 })
 
             if pd.notna(r.get("second_player_key")):
                 players.append({
-                    "player_api_id": r["second_player_key"],
-                    "nome_completo": r["event_second_player"]  # ✅ Corrigido
+                    "player_api_id": r.get("second_player_key"),
+                    "nome_completo": r.get("second_player", r.get("event_second_player")),
+                    "foto": r.get("event_second_player_logo") # -- LEO
                 })
 
     if df_rank is not None:
         for _, r in df_rank.iterrows():
             if pd.notna(r.get("player_key")):
                 players.append({
-                    "player_api_id": r["player_key"],
-                    "nome_completo": r["player"]
+                    "player_api_id": r.get("player_key"),
+                    "nome_completo": r.get("player"),
+                    "foto": None # Garante a existência da coluna mesmo que venha do ranking
                 })
 
     df_players = pd.DataFrame(players)
@@ -158,6 +161,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--date", required=True)
     parser.add_argument("--db", action="store_true")
+    parser.add_argument("--updatephoto", action="store_true")
     args = parser.parse_args()
 
     FINAL_DIR.mkdir(parents=True, exist_ok=True)
@@ -184,7 +188,7 @@ def main():
         print(f"[OK] CSV gerado: {nome}.csv")
 
         if args.db:
-            print(f"[DB] Inserindo stg_wta.{nome}...")
+            print(f"[DB] Inserindo stg_api.{nome}...")
             df.to_sql(
                 nome,
                 engine,
@@ -192,6 +196,24 @@ def main():
                 if_exists="append",
                 index=False
             )
+            
+        if args.db and nome == "players_raw" and args.updatephoto: # -- LEO
+            df.to_sql("tmp_players_foto", engine, schema="stg_api", if_exists="replace", index=False)
+            
+            with engine.begin() as conn:
+                try:
+                    query = """
+                        UPDATE p
+                        SET p.foto = t.foto
+                        FROM stg_api.players_raw p
+                        JOIN stg_api.tmp_players_foto t ON p.player_api_id = t.player_api_id
+                        WHERE p.foto IS NULL OR p.foto = '';
+                    """
+                    conn.execute(sqlalchemy.text(query))
+                    print("[DB] Fotos atualizadas com sucesso.")
+                finally:
+                    # O drop sempre vai rodar, mesmo que o update falhe
+                    conn.execute(sqlalchemy.text("DROP TABLE stg_api.tmp_players_foto"))
 
 if __name__ == "__main__":
     main()
