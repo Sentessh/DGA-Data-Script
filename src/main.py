@@ -36,8 +36,8 @@ def main():
         extract_cmd.append("--db")
     run(extract_cmd)
 
-    # ✅ etl_runner.py removido daqui — evita dupla execução
-    run([sys.executable, "src/sql_runner.py", "--date", data_ref])
+    if args.db:
+        run([sys.executable, "src/sql_runner.py", "--date", data_ref])
 
     print("\n✅ PIPELINE FINALIZADO COM SUCESSO")
 

@@ -37,7 +37,7 @@ def extract_all(date: str, load_db: bool = False):
         print(f"[OK] CSV gerado: {nome}.csv")
 
         if engine:
-            print(f"[DB] Inserindo stg_wta.{nome}...")
+            print(f"[DB] Inserindo stg_api.{nome}...")
             df.to_sql(
                 nome,
                 engine,

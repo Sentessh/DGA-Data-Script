@@ -68,17 +68,19 @@ def main(data_ref):
             print("✅ SQL pipeline finalizado com sucesso.")
 
         except Exception as e:
-            conn.execute(text("""
-                UPDATE dbo.etl_execucao
-                SET status = 'FAILED', finished_at = GETDATE()
-                WHERE pipeline = :pipeline
-                  AND data_referencia = :data_ref
-            """), {
-                "pipeline": PIPELINE,
-                "data_ref": data_ref
-            })
+            # Use a separate connection so this commit isn't rolled back with the failed transaction
+            with engine.begin() as err_conn:
+                err_conn.execute(text("""
+                    UPDATE dbo.etl_execucao
+                    SET status = 'FAILED', finished_at = GETDATE()
+                    WHERE pipeline = :pipeline
+                      AND data_referencia = :data_ref
+                """), {
+                    "pipeline": PIPELINE,
+                    "data_ref": data_ref
+                })
             print("❌ ERRO NO SQL RUNNER")
-            raise e
+            raise
 
 
 if __name__ == "__main__":

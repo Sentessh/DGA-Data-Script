@@ -23,7 +23,7 @@ def get_engine():
         f"DATABASE={os.getenv('DB_NAME')};"
         f"UID={os.getenv('DB_USER')};"
         f"PWD={os.getenv('DB_PASS')};"
-        "Encrypt=yes;TrustServerCertificate=yes;"
+        f"Encrypt={os.getenv('DB_ENCRYPT', 'yes')};TrustServerCertificate=yes;"
     )
     return sqlalchemy.create_engine(
         f"mssql+pyodbc:///?odbc_connect={quote_plus(odbc)}"
